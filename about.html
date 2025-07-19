@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Talent Desk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div id="header" class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200"   ></div>
+
+    <!-- About Hero Section -->
+    <section class="py-20 bg-blue-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                    About <span class="text-blue-600">Talent Desk</span>
+                </h1>
+                <p class="text-gray-600 text-xl mb-12 max-w-2xl mx-auto">
+                    Connecting talented professionals with innovative companies worldwide
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Content -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
+                    <p class="text-gray-600 mb-4">
+                        At Talent Desk, we're on a mission to revolutionize how companies find and work with top talent. 
+                        We believe in creating opportunities that empower both businesses and professionals to thrive in 
+                        the modern digital economy.
+                    </p>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Vision</h2>
+                    <p class="text-gray-600 mb-4">
+                        We envision a world where geographical boundaries no longer limit talent acquisition. 
+                        Our platform bridges the gap between exceptional talent and innovative companies, 
+                        fostering a global community of professional growth and success.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer"></div>
+
+    <script type="module">
+        import Header from './components/Header.js';
+        import Footer from './components/Footer.js';
+
+        // Configure header with different colors for about page
+        const headerConfig = {
+            bgColor: '#ffffff',
+            textColor: 'gray-900',
+            logo: 'Talent Desk',
+            navLinks: [
+                { url: 'index.html', text: 'Home' },
+                { url: 'about.html', text: 'About' },
+                { url: '#', text: 'Services' },
+                { url: '#', text: 'Contact' }
+            ]
+        };
+
+        // Configure footer with different colors for about page
+        const footerConfig = {
+            bgColor: '#f8fafc',
+            textColor: 'gray-900',
+            secondaryTextColor: 'gray-600',
+            borderColor: 'gray-200',
+            companyName: 'Talent Desk',
+            companyDescription: 'Find and hire expert freelancers for any project.',
+            links: {
+                company: [
+                    { url: '#', text: 'About Us' },
+                    { url: '#', text: 'Careers' },
+                    { url: '#', text: 'Blog' }
+                ],
+                support: [
+                    { url: '#', text: 'Help Center' },
+                    { url: '#', text: 'Terms of Service' },
+                    { url: '#', text: 'Privacy Policy' }
+                ],
+                contact: {
+                    email: 'contact@talentdesk.com',
+                    phone: '+1 (555) 123-4567'
+                }
+            }
+        };
+
+        // Render components
+        document.getElementById('header').innerHTML = Header(headerConfig);
+        document.getElementById('footer').innerHTML = Footer(footerConfig);
+    </script>
+</body>
+</html> 

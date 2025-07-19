@@ -1,0 +1,2370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talent Desk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+                Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+                sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #2563eb 0%, #22c55e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-badge {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+            border-radius: 9999px;
+            padding: 8px 16px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        @keyframes blob {
+            0% {
+                transform: translate(0px, 0px) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0px, 0px) scale(1);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromRight {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-left {
+            animation: slideInFromLeft 0.8s ease-out forwards;
+        }
+
+        .animate-slide-right {
+            animation: slideInFromRight 0.8s ease-out forwards;
+        }
+
+        .animate-fade-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-scale {
+            animation: scaleIn 0.6s ease-out forwards;
+        }
+
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+
+        .animation-delay-300 {
+            animation-delay: 300ms;
+        }
+
+        .animation-delay-600 {
+            animation-delay: 600ms;
+        }
+
+        .animation-delay-900 {
+            animation-delay: 900ms;
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .reveal-on-scroll.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0) translateZ(0) scaleY(1); }
+            50% { transform: translateX(-25%) translateZ(0) scaleY(0.8); }
+            100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .wave-bg {
+            position: absolute;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background-repeat: repeat-x;
+            animation: wave 10s linear infinite;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(-45deg, #EEF2FF, #ECFDF5, #F3E8FF, #EFF6FF);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        .dot {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .geometric-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .geometric-bg .shape {
+            position: absolute;
+            opacity: 0.1;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-revealed');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-on-scroll').forEach((element) => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+        <!-- Header -->
+        <header
+            class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center space-x-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="88" zoomAndPan="magnify" viewBox="0 0 262.5 112.499997" preserveAspectRatio="xMidYMid meet" version="1.2"><defs><clipPath id="fe134a2ee9"><path d="M 0.332031 0 L 261.671875 0 L 261.671875 112.003906 L 0.332031 112.003906 Z M 0.332031 0 "/></clipPath><clipPath id="f7b1a38894"><path d="M 65.457031 24.875 L 126.847656 24.875 L 126.847656 87.222656 L 65.457031 87.222656 Z M 65.457031 24.875 "/></clipPath><clipPath id="b71a87a7f8"><path d="M 96.152344 24.875 C 79.199219 24.875 65.457031 38.808594 65.457031 56 C 65.457031 73.191406 79.199219 87.128906 96.152344 87.128906 C 113.105469 87.128906 126.847656 73.191406 126.847656 56 C 126.847656 38.808594 113.105469 24.875 96.152344 24.875 Z M 96.152344 24.875 "/></clipPath><clipPath id="d38f025b58"><path d="M 104 54 L 111 54 L 111 62 L 104 62 Z M 104 54 "/></clipPath><clipPath id="8b0ffaf9fb"><path d="M 106.203125 53.90625 L 112.652344 55.796875 L 111 61.429688 L 104.550781 59.539062 Z M 106.203125 53.90625 "/></clipPath><clipPath id="a3ae91393b"><path d="M 109.421875 54.851562 L 110.988281 61.429688 L 104.550781 59.539062 Z M 109.421875 54.851562 "/></clipPath></defs><g id="c96b455dff"><g clip-rule="nonzero" clip-path="url(#fe134a2ee9)"><path style=" stroke:none;fill-rule:nonzero;fill:#ffffff;fill-opacity:1;" d="M 0.332031 0 L 261.671875 0 L 261.671875 112.003906 L 0.332031 112.003906 Z M 0.332031 0 "/><path style=" stroke:none;fill-rule:nonzero;fill:#ffffff;fill-opacity:1;" d="M 0.332031 0 L 261.671875 0 L 261.671875 112.003906 L 0.332031 112.003906 Z M 0.332031 0 "/></g><g clip-rule="nonzero" clip-path="url(#f7b1a38894)"><g clip-rule="nonzero" clip-path="url(#b71a87a7f8)"><path style=" stroke:none;fill-rule:nonzero;fill:#18b775;fill-opacity:1;" d="M 65.457031 24.875 L 126.847656 24.875 L 126.847656 87.222656 L 65.457031 87.222656 Z M 65.457031 24.875 "/></g></g><g style="fill:#ffffff;fill-opacity:1;"><g transform="translate(84.436462, 72.830616)"><path style="stroke:none" d="M 23.984375 -15.40625 L 25.03125 -14.640625 C 24.9375 -14.390625 24.804688 -14.0625 24.640625 -13.65625 C 24.484375 -13.257812 24.125 -12.460938 23.5625 -11.265625 C 23.007812 -10.066406 22.429688 -8.929688 21.828125 -7.859375 C 21.222656 -6.796875 20.445312 -5.617188 19.5 -4.328125 C 18.5625 -3.035156 17.601562 -1.9375 16.625 -1.03125 C 15.65625 -0.125 14.53125 0.613281 13.25 1.1875 C 11.976562 1.769531 10.703125 2.015625 9.421875 1.921875 C 8.660156 1.878906 8.007812 1.492188 7.46875 0.765625 C 6.925781 0.0351562 6.519531 -1.035156 6.25 -2.453125 C 5.976562 -3.878906 5.769531 -5.359375 5.625 -6.890625 C 5.476562 -8.421875 5.421875 -10.28125 5.453125 -12.46875 C 5.484375 -14.65625 5.53125 -16.59375 5.59375 -18.28125 C 5.65625 -19.96875 5.753906 -21.945312 5.890625 -24.21875 C 5.691406 -24.21875 5.414062 -24.207031 5.0625 -24.1875 C 4.71875 -24.175781 4.46875 -24.15625 4.3125 -24.125 C 3.601562 -24.125 3.09375 -24.109375 2.78125 -24.078125 L -0.328125 -24.078125 L -0.484375 -25.5625 C -0.421875 -25.5625 -0.335938 -25.578125 -0.234375 -25.609375 C -0.203125 -25.609375 0.00390625 -25.640625 0.390625 -25.703125 C 0.546875 -25.734375 0.734375 -25.765625 0.953125 -25.796875 C 1.179688 -25.828125 1.460938 -25.863281 1.796875 -25.90625 C 2.128906 -25.957031 2.40625 -26 2.625 -26.03125 C 2.726562 -26.03125 2.953125 -26.050781 3.296875 -26.09375 C 3.648438 -26.144531 3.921875 -26.191406 4.109375 -26.234375 C 4.460938 -26.296875 5.023438 -26.359375 5.796875 -26.421875 C 5.859375 -26.453125 5.921875 -26.46875 5.984375 -26.46875 C 6.398438 -32.78125 6.476562 -36.414062 6.21875 -37.375 C 6.34375 -37.40625 6.5 -37.4375 6.6875 -37.46875 C 6.882812 -37.5 7.257812 -37.519531 7.8125 -37.53125 C 8.375 -37.550781 8.898438 -37.53125 9.390625 -37.46875 C 9.890625 -37.40625 10.4375 -37.242188 11.03125 -36.984375 C 11.625 -36.734375 12.125 -36.390625 12.53125 -35.953125 C 12.945312 -35.523438 13.273438 -34.910156 13.515625 -34.109375 C 13.753906 -33.316406 13.828125 -32.378906 13.734375 -31.296875 C 13.703125 -30.722656 13.625 -29.320312 13.5 -27.09375 C 13.625 -27.09375 13.84375 -27.097656 14.15625 -27.109375 C 14.476562 -27.128906 14.707031 -27.140625 14.84375 -27.140625 C 15.1875 -27.171875 15.675781 -27.1875 16.3125 -27.1875 C 16.476562 -27.1875 16.703125 -27.191406 16.984375 -27.203125 C 17.273438 -27.222656 17.484375 -27.234375 17.609375 -27.234375 L 19.484375 -27.234375 L 19.578125 -25.75 C 19.378906 -25.6875 19.109375 -25.625 18.765625 -25.5625 C 18.472656 -25.5 18.132812 -25.445312 17.75 -25.40625 C 17.625 -25.40625 17.425781 -25.378906 17.15625 -25.328125 C 16.882812 -25.285156 16.671875 -25.25 16.515625 -25.21875 C 16.347656 -25.21875 16.097656 -25.191406 15.765625 -25.140625 C 15.429688 -25.097656 15.171875 -25.0625 14.984375 -25.03125 C 14.847656 -25.03125 14.597656 -25.003906 14.234375 -24.953125 C 13.867188 -24.910156 13.59375 -24.875 13.40625 -24.84375 C 13.269531 -22.320312 13.171875 -19.546875 13.109375 -16.515625 C 13.140625 -10.703125 13.1875 -7.429688 13.25 -6.703125 C 13.476562 -4.085938 14.039062 -2.796875 14.9375 -2.828125 C 15.34375 -2.828125 15.820312 -3.050781 16.375 -3.5 C 17.289062 -4.257812 18.382812 -5.628906 19.65625 -7.609375 C 20.9375 -9.585938 21.976562 -11.390625 22.78125 -13.015625 Z M 23.984375 -15.40625 "/></g></g><g clip-rule="nonzero" clip-path="url(#d38f025b58)"><g clip-rule="nonzero" clip-path="url(#8b0ffaf9fb)"><g clip-rule="nonzero" clip-path="url(#a3ae91393b)"><path style=" stroke:none;fill-rule:nonzero;fill:#ffffff;fill-opacity:1;" d="M 106.203125 53.90625 L 112.652344 55.796875 L 111 61.429688 L 104.550781 59.539062 Z M 106.203125 53.90625 "/></g></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(131.785174, 50.064245)"><path style="stroke:none" d="M 10.15625 -9.578125 L 6.890625 -9.578125 L 6.890625 0 L 3.859375 0 L 3.859375 -9.578125 L 0.578125 -9.578125 L 0.578125 -12.609375 L 10.15625 -12.609375 Z M 10.15625 -9.578125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(142.347196, 50.064245)"><path style="stroke:none" d="M 7.75 -10.03125 L 10.46875 -10.03125 L 10.46875 0 L 7.75 0 L 7.75 -1.125 C 7.195312 -0.394531 6.359375 -0.03125 5.234375 -0.03125 C 3.867188 -0.0195312 2.691406 -0.5 1.703125 -1.46875 C 0.722656 -2.4375 0.226562 -3.613281 0.21875 -5 C 0.195312 -6.375 0.671875 -7.550781 1.640625 -8.53125 C 2.617188 -9.507812 3.796875 -10.007812 5.171875 -10.03125 C 6.316406 -10.03125 7.175781 -9.660156 7.75 -8.921875 Z M 6.9375 -3.296875 C 7.414062 -3.773438 7.65625 -4.359375 7.65625 -5.046875 C 7.65625 -5.742188 7.410156 -6.320312 6.921875 -6.78125 C 6.429688 -7.28125 5.859375 -7.515625 5.203125 -7.484375 C 4.515625 -7.484375 3.929688 -7.242188 3.453125 -6.765625 C 2.972656 -6.285156 2.734375 -5.703125 2.734375 -5.015625 C 2.734375 -4.347656 2.976562 -3.769531 3.46875 -3.28125 C 3.945312 -2.800781 4.53125 -2.5625 5.21875 -2.5625 C 5.914062 -2.582031 6.488281 -2.828125 6.9375 -3.296875 Z M 6.9375 -3.296875 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(153.393707, 50.064245)"><path style="stroke:none" d="M 3.296875 -13.46875 L 3.296875 0 L 0.578125 0 L 0.578125 -13.46875 Z M 3.296875 -13.46875 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(157.269688, 50.064245)"><path style="stroke:none" d="M 10.203125 -4.5625 C 10.210938 -4.289062 10.210938 -4.128906 10.203125 -4.078125 L 2.90625 -4.09375 C 3.007812 -3.789062 3.195312 -3.503906 3.46875 -3.234375 C 3.976562 -2.753906 4.5625 -2.515625 5.21875 -2.515625 C 5.914062 -2.546875 6.5 -2.789062 6.96875 -3.25 L 7.03125 -3.328125 L 9.5625 -2.546875 C 9 -1.671875 8.414062 -1.046875 7.8125 -0.671875 C 7.125 -0.234375 6.265625 -0.0078125 5.234375 0 C 3.867188 0.0078125 2.691406 -0.46875 1.703125 -1.4375 C 0.722656 -2.40625 0.226562 -3.582031 0.21875 -4.96875 C 0.195312 -6.332031 0.671875 -7.507812 1.640625 -8.5 C 2.617188 -9.476562 3.796875 -9.972656 5.171875 -9.984375 C 6.546875 -9.992188 7.722656 -9.515625 8.703125 -8.546875 C 9.691406 -7.578125 10.191406 -6.398438 10.203125 -5.015625 Z M 5.203125 -7.453125 C 4.515625 -7.453125 3.929688 -7.210938 3.453125 -6.734375 C 3.203125 -6.460938 3.023438 -6.191406 2.921875 -5.921875 L 7.484375 -5.921875 C 7.378906 -6.191406 7.195312 -6.46875 6.9375 -6.75 C 6.445312 -7.21875 5.867188 -7.453125 5.203125 -7.453125 Z M 5.203125 -7.453125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(167.676661, 50.064245)"><path style="stroke:none" d="M 5.546875 -9.953125 C 6.960938 -10.066406 8.140625 -9.695312 9.078125 -8.84375 C 10.066406 -7.925781 10.5625 -6.640625 10.5625 -4.984375 L 10.5625 0 L 8.046875 0 L 8.046875 -4.921875 L 8.03125 -4.921875 L 8.03125 -4.96875 C 8.03125 -5.644531 7.789062 -6.222656 7.3125 -6.703125 C 6.832031 -7.179688 6.25 -7.421875 5.5625 -7.421875 C 4.863281 -7.398438 4.28125 -7.15625 3.8125 -6.6875 C 3.320312 -6.195312 3.09375 -5.613281 3.125 -4.9375 L 3.125 -4.921875 L 3.109375 -4.921875 L 3.109375 0 L 0.390625 0 L 0.390625 -10.03125 L 3.109375 -10.03125 L 3.109375 -8.71875 C 3.710938 -9.445312 4.523438 -9.859375 5.546875 -9.953125 Z M 5.546875 -9.953125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(178.626274, 50.064245)"><path style="stroke:none" d="M 7.78125 -9.984375 L 7.78125 -7.265625 L 5.546875 -7.265625 L 5.546875 0 L 2.828125 0 L 2.828125 -7.265625 L 0.578125 -7.265625 L 0.578125 -9.984375 L 2.828125 -9.984375 L 2.828125 -13.46875 L 5.546875 -13.46875 L 5.546875 -9.984375 Z M 7.78125 -9.984375 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(186.99623, 50.064245)"><path style="stroke:none" d=""/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(131.785174, 69.619109)"><path style="stroke:none" d="M 6.953125 -16.21875 C 9.191406 -16.21875 11.117188 -15.421875 12.734375 -13.828125 C 14.316406 -12.242188 15.109375 -10.320312 15.109375 -8.0625 C 15.109375 -5.820312 14.316406 -3.894531 12.734375 -2.28125 C 11.117188 -0.695312 9.191406 0.09375 6.953125 0.09375 L 0.75 0.09375 L 0.75 -16.21875 Z M 10.0625 -4.953125 C 10.914062 -5.804688 11.34375 -6.84375 11.34375 -8.0625 C 11.34375 -9.269531 10.914062 -10.316406 10.0625 -11.203125 C 9.207031 -12.054688 8.164062 -12.484375 6.9375 -12.484375 L 4.671875 -12.484375 L 4.671875 -3.671875 L 6.953125 -3.671875 C 8.171875 -3.671875 9.207031 -4.097656 10.0625 -4.953125 Z M 10.0625 -4.953125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(147.649664, 69.619109)"><path style="stroke:none" d="M 13.203125 -5.90625 C 13.222656 -5.550781 13.222656 -5.335938 13.203125 -5.265625 L 3.765625 -5.296875 C 3.898438 -4.910156 4.144531 -4.539062 4.5 -4.1875 C 5.144531 -3.570312 5.894531 -3.265625 6.75 -3.265625 C 7.65625 -3.296875 8.410156 -3.613281 9.015625 -4.21875 L 9.109375 -4.3125 L 12.375 -3.296875 C 11.65625 -2.171875 10.90625 -1.363281 10.125 -0.875 C 9.226562 -0.3125 8.113281 -0.0195312 6.78125 0 C 5.007812 0.0195312 3.484375 -0.597656 2.203125 -1.859375 C 0.929688 -3.109375 0.289062 -4.628906 0.28125 -6.421875 C 0.257812 -8.203125 0.878906 -9.726562 2.140625 -11 C 3.390625 -12.269531 4.910156 -12.914062 6.703125 -12.9375 C 8.472656 -12.945312 10 -12.328125 11.28125 -11.078125 C 12.550781 -9.816406 13.191406 -8.289062 13.203125 -6.5 Z M 6.734375 -9.640625 C 5.847656 -9.640625 5.09375 -9.332031 4.46875 -8.71875 C 4.15625 -8.363281 3.929688 -8.007812 3.796875 -7.65625 L 9.6875 -7.65625 C 9.550781 -8.007812 9.316406 -8.367188 8.984375 -8.734375 C 8.347656 -9.335938 7.597656 -9.640625 6.734375 -9.640625 Z M 6.734375 -9.640625 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(161.129472, 69.619109)"><path style="stroke:none" d="M 5.96875 0 C 5.101562 0 4.34375 -0.132812 3.6875 -0.40625 C 3.164062 -0.582031 2.628906 -0.925781 2.078125 -1.4375 C 1.128906 -2.320312 0.695312 -3.441406 0.78125 -4.796875 L 0.78125 -5.078125 L 3.59375 -5.015625 L 3.8125 -5.015625 L 3.8125 -4.828125 C 3.832031 -4.398438 3.925781 -4.054688 4.09375 -3.796875 C 4.375 -3.304688 5 -3.0625 5.96875 -3.0625 C 6.78125 -3.0625 7.359375 -3.15625 7.703125 -3.34375 C 7.890625 -3.425781 8.015625 -3.535156 8.078125 -3.671875 C 8.117188 -3.710938 8.140625 -3.757812 8.140625 -3.8125 L 8.15625 -3.9375 C 8.15625 -4.289062 7.878906 -4.578125 7.328125 -4.796875 C 7.109375 -4.878906 6.859375 -4.945312 6.578125 -5 C 6.359375 -5.050781 6.113281 -5.09375 5.84375 -5.125 C 4.84375 -5.21875 4.007812 -5.414062 3.34375 -5.71875 C 2.664062 -5.988281 2.113281 -6.359375 1.6875 -6.828125 C 1.082031 -7.515625 0.78125 -8.300781 0.78125 -9.1875 C 0.78125 -9.738281 0.878906 -10.25 1.078125 -10.71875 C 1.234375 -11.09375 1.4375 -11.421875 1.6875 -11.703125 C 2.582031 -12.734375 4.03125 -13.25 6.03125 -13.25 C 7.21875 -13.25 8.222656 -13.015625 9.046875 -12.546875 C 9.679688 -12.203125 10.191406 -11.726562 10.578125 -11.125 C 10.867188 -10.675781 11.078125 -10.148438 11.203125 -9.546875 C 11.234375 -9.335938 11.257812 -9.144531 11.28125 -8.96875 L 11.28125 -8.4375 L 8.234375 -8.4375 L 8.234375 -8.8125 C 8.210938 -8.875 8.203125 -8.941406 8.203125 -9.015625 C 8.160156 -9.203125 8.097656 -9.351562 8.015625 -9.46875 C 7.640625 -9.96875 6.976562 -10.21875 6.03125 -10.21875 C 4.625 -10.21875 3.921875 -9.925781 3.921875 -9.34375 C 3.921875 -9.039062 4.085938 -8.796875 4.421875 -8.609375 C 4.773438 -8.390625 5.367188 -8.234375 6.203125 -8.140625 C 8.128906 -7.929688 9.523438 -7.316406 10.390625 -6.296875 C 10.984375 -5.609375 11.28125 -4.820312 11.28125 -3.9375 L 11.28125 -3.765625 L 11.25 -3.546875 C 11.25 -3.328125 11.222656 -3.125 11.171875 -2.9375 C 11.035156 -2.40625 10.785156 -1.925781 10.421875 -1.5 C 10.003906 -1 9.414062 -0.625 8.65625 -0.375 C 7.90625 -0.125 7.007812 0 5.96875 0 Z M 5.96875 0 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(173.153366, 69.619109)"><path style="stroke:none" d="M 9.671875 0 L 5.46875 -5.015625 L 4.265625 -3.84375 L 4.265625 0 L 0.75 0 L 0.75 -17.453125 L 4.265625 -17.453125 L 4.265625 -8.8125 L 8.390625 -12.9375 L 13.359375 -12.90625 L 7.9375 -7.5 L 14.34375 0 Z M 9.671875 0 "/></g></g></g></svg>
+                    </div>
+                    <nav class="hidden lg:flex items-center space-x-8">
+                        <a href="#"
+                            class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Home</a>
+                        <a href="#about"
+                            class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">About</a>
+                        <div class="relative">
+                            <button
+                                class="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                                <span>Solutions</span>
+                            </button>
+                        </div>
+                        <a href="#services"
+                            class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Services</a>
+                        <a href="#success-stories"
+                            class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Success
+                            Stories</a>
+                        <a href="#blog"
+                            class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Blog</a>
+                        <a href="#contact"
+                            class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Contact</a>
+                    </nav>
+                    <div class="hidden lg:flex items-center space-x-4">
+                        <button
+                            class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105">
+                            Get Started
+                        </button>
+                    </div>
+                    <button class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-menu h-6 w-6">
+                            <line x1="4" x2="20" y1="12" y2="12"></line>
+                            <line x1="4" x2="20" y1="6" y2="6"></line>
+                            <line x1="4" x2="20" y1="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section with Animated Background -->
+        <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0">
+                <div
+                    class="absolute top-20 left-10 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob">
+                </div>
+                <div
+                    class="absolute top-40 right-10 w-72 h-72 bg-green-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000">
+                </div>
+                <div
+                    class="absolute -bottom-8 left-20 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000">
+                </div>
+            </div>
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
+                <div class="text-center">
+                    <div
+                        class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-8 animate-fade-up">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+                        Building the Future of Non-Tech Careers
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight animate-slide-left">
+                        Empowering the
+                        <span
+                            class="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">Next
+                            Generation</span>
+                        of Non-Tech Talent
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed animate-slide-right animation-delay-300">
+                        Training, Hiring, and Startup Solutions in Sales, Digital
+                        Marketing & Recruitment.
+                        <span class="block mt-2 text-lg text-gray-500">Bridge the gap between talent and
+                            opportunity.</span>
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+                        <button
+                            class="group bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl">
+                            <span>Explore Opportunities</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-arrow-right h-5 w-5 group-hover:translate-x-1 transition-transform duration-200">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </button>
+                        <button
+                            class="group bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 border-2 border-gray-200 hover:border-blue-300 flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-play h-5 w-5 text-blue-600">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            <span>Watch Demo</span>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                        <div class="text-center animate-fade-up animation-delay-300">
+                            <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">500+</div>
+                            <div class="text-gray-600">Students Trained</div>
+                        </div>
+                        <div class="text-center animate-fade-up animation-delay-600">
+                            <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">100+</div>
+                            <div class="text-gray-600">Startups Served</div>
+                        </div>
+                        <div class="text-center animate-fade-up animation-delay-900">
+                            <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">85%</div>
+                            <div class="text-gray-600">Placement Rate</div>
+                        </div>
+                        <div class="text-center animate-fade-up animation-delay-900">
+                            <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Global</div>
+                            <div class="text-gray-600">Reach</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="py-24 bg-white reveal-on-scroll">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                        Building an Ecosystem That<span
+                            class="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">Works
+                            for Everyone</span>
+                    </h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        Talent Desk bridges the gap between students, colleges, and
+                        startups — helping students build real skills, colleges increase
+                        placement success, and startups hire job-ready talent.
+                    </p>
+                </div>
+                <div class="relative">
+                    <div class="hidden lg:flex items-center justify-between mb-16">
+                        <div class="flex-1 max-w-sm">
+                            <div
+                                class="bg-blue-50 rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-scale animation-delay-300">
+                                <div
+                                    class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-users h-8 w-8 text-blue-600">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Students
+                                </h3>
+                                <p class="text-gray-600 mb-6">
+                                    Join our hands-on training programs
+                                </p>
+                                <ul class="space-y-2">
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></div>
+                                        Real-world projects
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></div>
+                                        Expert mentorship
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></div>
+                                        Industry exposure
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center px-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-arrow-right h-8 w-8 text-gray-400">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1 max-w-sm">
+                            <div
+                                class="bg-green-50 rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-scale animation-delay-600">
+                                <div
+                                    class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-graduation-cap h-8 w-8 text-green-600">
+                                        <path
+                                            d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z">
+                                        </path>
+                                        <path d="M22 10v6"></path>
+                                        <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Colleges
+                                </h3>
+                                <p class="text-gray-600 mb-6">
+                                    Partner for better placement outcomes
+                                </p>
+                                <ul class="space-y-2">
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                        Higher placement rates
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                        Industry connections
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                        Skill development
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center px-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-arrow-right h-8 w-8 text-gray-400">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1 max-w-sm">
+                            <div
+                                class="bg-purple-50 rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-scale animation-delay-900">
+                                <div
+                                    class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-rocket h-8 w-8 text-purple-600">
+                                        <path
+                                            d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z">
+                                        </path>
+                                        <path
+                                            d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z">
+                                        </path>
+                                        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                                        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Startups
+                                </h3>
+                                <p class="text-gray-600 mb-6">Hire job-ready talent</p>
+                                <ul class="space-y-2">
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></div>
+                                        Pre-trained professionals
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></div>
+                                        Reduced hiring costs
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></div>
+                                        Faster scaling
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:hidden space-y-8">
+                        <div class="relative">
+                            <div class="bg-blue-50 rounded-2xl p-8 text-center">
+                                <div
+                                    class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-users h-8 w-8 text-blue-600">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Students
+                                </h3>
+                                <p class="text-gray-600 mb-6">
+                                    Join our hands-on training programs
+                                </p>
+                                <ul class="space-y-2">
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></div>
+                                        Real-world projects
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></div>
+                                        Expert mentorship
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></div>
+                                        Industry exposure
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex justify-center py-4">
+                                <div class="w-px h-8 bg-gray-300"></div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="bg-green-50 rounded-2xl p-8 text-center">
+                                <div
+                                    class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-graduation-cap h-8 w-8 text-green-600">
+                                        <path
+                                            d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z">
+                                        </path>
+                                        <path d="M22 10v6"></path>
+                                        <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Colleges
+                                </h3>
+                                <p class="text-gray-600 mb-6">
+                                    Partner for better placement outcomes
+                                </p>
+                                <ul class="space-y-2">
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                        Higher placement rates
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                        Industry connections
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                        Skill development
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex justify-center py-4">
+                                <div class="w-px h-8 bg-gray-300"></div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="bg-purple-50 rounded-2xl p-8 text-center">
+                                <div
+                                    class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-rocket h-8 w-8 text-purple-600">
+                                        <path
+                                            d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z">
+                                        </path>
+                                        <path
+                                            d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z">
+                                        </path>
+                                        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                                        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Startups
+                                </h3>
+                                <p class="text-gray-600 mb-6">Hire job-ready talent</p>
+                                <ul class="space-y-2">
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></div>
+                                        Pre-trained professionals
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></div>
+                                        Reduced hiring costs
+                                    </li>
+                                    <li class="text-sm text-gray-500 flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></div>
+                                        Faster scaling
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-3xl p-12">
+                    <h3 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                        How It Works
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-blue-600 font-bold text-lg">1</span>
+                            </div>
+                            <h4 class="text-xl font-semibold text-gray-900 mb-2">Train</h4>
+                            <p class="text-gray-600">
+                                Students get hands-on training in Sales, Digital Marketing
+                                &amp; Recruitment
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-green-600 font-bold text-lg">2</span>
+                            </div>
+                            <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                                Connect
+                            </h4>
+                            <p class="text-gray-600">
+                                Match trained talent with startup opportunities through our
+                                network
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-purple-600 font-bold text-lg">3</span>
+                            </div>
+                            <h4 class="text-xl font-semibold text-gray-900 mb-2">Grow</h4>
+                            <p class="text-gray-600">
+                                Everyone wins: students get jobs, startups get talent,
+                                colleges get results
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="about" class="py-24 bg-white reveal-on-scroll relative overflow-hidden">
+            <div class="geometric-bg">
+                <div class="shape" style="top: 10%; left: 5%; width: 60px; height: 60px; background: #3B82F6; transform: rotate(45deg);"></div>
+                <div class="shape" style="top: 40%; right: 10%; width: 80px; height: 80px; border-radius: 50%; background: #10B981;"></div>
+                <div class="shape" style="bottom: 20%; left: 15%; width: 70px; height: 70px; border-radius: 50%; background: #6366F1;"></div>
+                <div class="shape animate-float" style="top: 60%; right: 15%; width: 50px; height: 50px; background: #8B5CF6; transform: rotate(30deg);"></div>
+            </div>
+            <div class="relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-20">
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                            Creating More Opportunities<span
+                                class="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">Beyond
+                                Coding</span>
+                        </h2>
+                        <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                            While coding jobs often dominate the narrative, the reality is
+                            that many thriving careers exist in Sales, Digital Marketing, and
+                            Recruitment. Talent Desk is here to build an ecosystem that
+                            prepares and connects job-ready talent with growing startups and
+                            businesses.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+                        <div class="text-center">
+                            <div class="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
+                                500+
+                            </div>
+                            <div class="text-gray-600 font-medium">Students Trained</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl md:text-5xl font-bold text-green-600 mb-2">
+                                100+
+                            </div>
+                            <div class="text-gray-600 font-medium">Startup Partners</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl md:text-5xl font-bold text-purple-600 mb-2">
+                                85%
+                            </div>
+                            <div class="text-gray-600 font-medium">Placement Success</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl md:text-5xl font-bold text-orange-600 mb-2">
+                                50+
+                            </div>
+                            <div class="text-gray-600 font-medium">College Partners</div>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-12 mb-20">
+                        <div class="flex items-start space-x-6">
+                            <div class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-target h-8 w-8 text-blue-600">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <circle cx="12" cy="12" r="6"></circle>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Our Mission
+                                </h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    Creating more opportunities beyond coding by building an
+                                    ecosystem that prepares and connects job-ready talent with
+                                    growing startups and businesses.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-6">
+                            <div class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-users h-8 w-8 text-blue-600">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Our Approach
+                                </h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    We believe in practical learning through real-world projects,
+                                    connecting students directly with industry needs and startup
+                                    challenges.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-6">
+                            <div class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-award h-8 w-8 text-blue-600">
+                                    <circle cx="12" cy="8" r="6"></circle>
+                                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Our Impact
+                                </h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    Proven track record of successful placements, satisfied
+                                    clients, and thriving partnerships across the talent
+                                    ecosystem.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-6">
+                            <div class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-globe h-8 w-8 text-blue-600">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                    <path d="M2 12h20"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Our Vision
+                                </h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    To become the leading platform for non-tech career
+                                    development, serving students, colleges, and startups
+                                    globally.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-3xl p-12">
+                        <h3 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                            Why Talent Desk?
+                        </h3>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-2xl">🎯</span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                                    Real-World Training
+                                </h4>
+                                <p class="text-gray-600 text-sm">
+                                    We train students through actual startup projects, not
+                                    theoretical concepts
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-2xl">🤝</span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                                    College Partnerships
+                                </h4>
+                                <p class="text-gray-600 text-sm">
+                                    We partner with colleges to drive higher placement rates and
+                                    industry exposure
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-2xl">🚀</span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                                    Startup Ready
+                                </h4>
+                                <p class="text-gray-600 text-sm">
+                                    We help startups hire skilled talent quickly and
+                                    cost-effectively
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-2xl">💼</span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                                    Full Services
+                                </h4>
+                                <p class="text-gray-600 text-sm">
+                                    We offer comprehensive digital marketing, sales, and
+                                    recruitment services
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-20 text-center">
+                        <h3 class="text-3xl font-bold text-gray-900 mb-6">
+                            Our Leadership
+                        </h3>
+                        <p class="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
+                            Led by industry experts with deep experience in talent
+                            development, startup growth, and educational partnerships.
+                        </p>
+                        <div class="bg-white rounded-2xl p-8 shadow-lg inline-block">
+                            <div class="text-gray-600 mb-4">
+                                "We're building more than just a training platform - we're
+                                creating an entire ecosystem where talent meets opportunity."
+                            </div>
+                            <div class="font-semibold text-gray-900">
+                                Talent Desk Leadership Team
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="py-24 bg-gray-50 reveal-on-scroll">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                        Explore Our<span
+                            class="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">Solutions</span>
+                    </h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Comprehensive solutions designed for every stakeholder in the
+                        talent ecosystem
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div
+                        class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group animate-slide-left">
+                        <div class="flex items-start space-x-6">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-users h-8 w-8 text-blue-600">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    For Students
+                                </h3>
+                                <p class="text-gray-600 mb-6 leading-relaxed">
+                                    Launch your career in Sales, Digital Marketing, or
+                                    Recruitment with hands-on training and real project
+                                    experience.
+                                </p>
+                                <ul class="space-y-3 mb-8">
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">6-month training program</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Real startup projects</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Personalized mentorship</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Job placement support</span>
+                                    </li>
+                                </ul>
+                                <a href="#students"
+                                    class="inline-flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 group"><span>Apply
+                                        Now</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-arrow-right h-4 w-4 group-hover:translate-x-1 transition-transform duration-200">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group animate-slide-right">
+                        <div class="flex items-start space-x-6">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-graduation-cap h-8 w-8 text-green-600">
+                                    <path
+                                        d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z">
+                                    </path>
+                                    <path d="M22 10v6"></path>
+                                    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    For Colleges
+                                </h3>
+                                <p class="text-gray-600 mb-6 leading-relaxed">
+                                    Boost placement success rates by partnering with us to
+                                    prepare students for high-demand non-tech roles.
+                                </p>
+                                <ul class="space-y-3 mb-8">
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Industry workshops</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Training modules</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Startup network access</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Placement analytics</span>
+                                    </li>
+                                </ul>
+                                <a href="#colleges"
+                                    class="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 group"><span>Partner
+                                        With Us</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-arrow-right h-4 w-4 group-hover:translate-x-1 transition-transform duration-200">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group animate-slide-left">
+                        <div class="flex items-start space-x-6">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-rocket h-8 w-8 text-purple-600">
+                                    <path
+                                        d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z">
+                                    </path>
+                                    <path
+                                        d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z">
+                                    </path>
+                                    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                                    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    For Startups
+                                </h3>
+                                <p class="text-gray-600 mb-6 leading-relaxed">
+                                    Hire trained, job-ready professionals in Sales, Digital
+                                    Marketing, and Recruitment to scale faster.
+                                </p>
+                                <ul class="space-y-3 mb-8">
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Pre-trained talent</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Flexible hiring models</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Reduced training costs</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Quick onboarding</span>
+                                    </li>
+                                </ul>
+                                <a href="#startups"
+                                    class="inline-flex items-center space-x-2 bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 group"><span>Hire
+                                        Talent</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-arrow-right h-4 w-4 group-hover:translate-x-1 transition-transform duration-200">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group animate-slide-right">
+                        <div class="flex items-start space-x-6">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-briefcase h-8 w-8 text-orange-600">
+                                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                                    Our Services
+                                </h3>
+                                <p class="text-gray-600 mb-6 leading-relaxed">
+                                    Expert services in Digital Marketing, Sales Operations, and
+                                    Recruitment to accelerate your growth.
+                                </p>
+                                <ul class="space-y-3 mb-8">
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-orange-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Digital marketing</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-orange-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Sales operations</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-orange-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Recruitment services</span>
+                                    </li>
+                                    <li class="flex items-center text-gray-700">
+                                        <div class="w-2 h-2 bg-orange-400 rounded-full mr-3 flex-shrink-0"></div>
+                                        <span class="text-sm">Marketing automation</span>
+                                    </li>
+                                </ul>
+                                <a href="#services"
+                                    class="inline-flex items-center space-x-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 group"><span>Explore
+                                        Services</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-arrow-right h-4 w-4 group-hover:translate-x-1 transition-transform duration-200">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-16">
+                    <div class="bg-gradient-to-r from-blue-600 to-green-500 rounded-3xl p-12 text-white">
+                        <h3 class="text-3xl font-bold mb-4">Ready to Get Started?</h3>
+                        <p class="text-xl mb-8 opacity-90">
+                            Join thousands of students, colleges, and startups in our
+                            ecosystem
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button
+                                class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-200">
+                                Book a Free Consultation</button><button
+                                class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-all duration-200">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="services" class="py-24 gradient-bg reveal-on-scroll relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-20">
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                            Startup Solutions<span
+                                class="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">Tailored
+                                to Your Needs</span>
+                        </h2>
+                        <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                            In addition to helping you hire talent, Talent Desk provides
+                            expert services in Digital Marketing, Sales Operations, and Hiring
+                            to accelerate your startup's growth.
+                        </p>
+                    </div>
+                    <div class="space-y-16 mb-20">
+                        <div class="bg-white rounded-3xl p-8 shadow-lg">
+                            <div class="flex items-center space-x-4 mb-8">
+                                <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-megaphone h-8 w-8 text-blue-600">
+                                        <path d="m3 11 18-5v12L3 14v-3z"></path>
+                                        <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-3xl font-bold text-gray-900">
+                                    Digital Marketing Services
+                                </h3>
+                            </div>
+                            <div class="grid md:grid-cols-3 gap-8">
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        Paid Media Management
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Expert management of Meta, Google, and LinkedIn advertising
+                                        campaigns
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Campaign strategy
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Ad creation &amp; optimization
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Performance tracking
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            ROI analysis
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        SEO &amp; Content Marketing
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Drive organic growth with strategic content and search
+                                        optimization
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Keyword research
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Content strategy
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Technical SEO
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Link building
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        Marketing Automation
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Streamline your marketing processes with advanced automation
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Email campaigns
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Lead nurturing
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            CRM integration
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Analytics setup
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-3xl p-8 shadow-lg">
+                            <div class="flex items-center space-x-4 mb-8">
+                                <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-trending-up h-8 w-8 text-green-600">
+                                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                                        <polyline points="16 7 22 7 22 13"></polyline>
+                                    </svg>
+                                </div>
+                                <h3 class="text-3xl font-bold text-gray-900">
+                                    Sales Operations
+                                </h3>
+                            </div>
+                            <div class="grid md:grid-cols-3 gap-8">
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        CRM Setup &amp; Optimization
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Build and optimize your sales infrastructure for maximum
+                                        efficiency
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            CRM configuration
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Pipeline design
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Automation setup
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Team training
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        SDR Playbook Creation
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Develop comprehensive sales development strategies and
+                                        processes
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Outreach sequences
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Script development
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            KPI frameworks
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Training materials
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        SDR-as-a-Service
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Dedicated sales development representatives to fuel your
+                                        pipeline
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Lead qualification
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Appointment setting
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Pipeline management
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Regular reporting
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-3xl p-8 shadow-lg">
+                            <div class="flex items-center space-x-4 mb-8">
+                                <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-users h-8 w-8 text-purple-600">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-3xl font-bold text-gray-900">
+                                    Hiring &amp; Recruitment
+                                </h3>
+                            </div>
+                            <div class="grid md:grid-cols-3 gap-8">
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        Recruitment Process Outsourcing
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        End-to-end recruitment solutions for your hiring needs
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Job posting
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Candidate screening
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Interview coordination
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Offer management
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        On-Demand Hiring
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Flexible hiring solutions for immediate talent needs
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Quick turnaround
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Pre-screened candidates
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Flexible contracts
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Quality assurance
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div
+                                    class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                    <h4 class="text-xl font-bold text-gray-900 mb-3">
+                                        Trained Talent Pool Access
+                                    </h4>
+                                    <p class="text-gray-600 mb-6">
+                                        Direct access to our network of trained professionals
+                                    </p>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Sales professionals
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Marketing specialists
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Recruitment experts
+                                        </li>
+                                        <li class="flex items-center text-sm text-gray-700">
+                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3 flex-shrink-0"></div>
+                                            Immediate availability
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-12 mb-16">
+                        <h3 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                            Our Process
+                        </h3>
+                        <div class="grid md:grid-cols-4 gap-8">
+                            <div class="text-center relative animate-scale animation-delay-300">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-blue-600 font-bold text-lg">01</span>
+                                </div>
+                                <h4 class="text-xl font-semibold text-gray-900 mb-3">
+                                    Discovery Call
+                                </h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    We understand your needs, challenges, and goals through a
+                                    detailed consultation.
+                                </p>
+                                <div
+                                    class="hidden md:block absolute top-8 left-full w-full h-px bg-gray-200 transform -translate-x-1/2">
+                                </div>
+                            </div>
+                            <div class="text-center relative animate-scale animation-delay-600">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-blue-600 font-bold text-lg">02</span>
+                                </div>
+                                <h4 class="text-xl font-semibold text-gray-900 mb-3">
+                                    Strategy Development
+                                </h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Our experts create a customized strategy tailored to your
+                                    specific requirements.
+                                </p>
+                                <div
+                                    class="hidden md:block absolute top-8 left-full w-full h-px bg-gray-200 transform -translate-x-1/2">
+                                </div>
+                            </div>
+                            <div class="text-center relative animate-scale animation-delay-900">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-blue-600 font-bold text-lg">03</span>
+                                </div>
+                                <h4 class="text-xl font-semibold text-gray-900 mb-3">
+                                    Implementation
+                                </h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    We execute the strategy with precision, keeping you informed
+                                    every step of the way.
+                                </p>
+                                <div
+                                    class="hidden md:block absolute top-8 left-full w-full h-px bg-gray-200 transform -translate-x-1/2">
+                                </div>
+                            </div>
+                            <div class="text-center relative animate-scale animation-delay-900">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-blue-600 font-bold text-lg">04</span>
+                                </div>
+                                <h4 class="text-xl font-semibold text-gray-900 mb-3">
+                                    Optimization
+                                </h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Continuous monitoring and optimization to ensure maximum ROI
+                                    and results.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-600 to-green-500 rounded-3xl p-12 text-white text-center">
+                        <h3 class="text-3xl font-bold mb-4">
+                            Ready to Accelerate Your Growth?
+                        </h3>
+                        <p class="text-xl mb-8 opacity-90">
+                            Let's discuss how our services can help your startup scale faster
+                            and more efficiently.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button
+                                class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-200">
+                                Get a Free Quote</button><button
+                                class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-all duration-200">
+                                Schedule Consultation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="success" class="py-24 bg-white reveal-on-scroll relative overflow-hidden">
+            <div class="geometric-bg">
+                <div class="dot" style="top: 10%; left: 10%; width: 100px; height: 100px; background: #3B82F6;"></div>
+                <div class="dot" style="top: 40%; right: 15%; width: 150px; height: 150px; background: #10B981;"></div>
+                <div class="dot" style="bottom: 20%; left: 20%; width: 120px; height: 120px; background: #6366F1;"></div>
+                <div class="dot" style="bottom: 30%; right: 25%; width: 80px; height: 80px; background: #8B5CF6;"></div>
+            </div>
+            <div class="relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-20">
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                            See the Impact of<span
+                                class="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">Talent
+                                Desk</span>
+                        </h2>
+                        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                            Real stories from students, colleges, and startups who have
+                            transformed their outcomes through our ecosystem
+                        </p>
+                    </div>
+                    <div class="space-y-16 mb-20">
+                        <div class="bg-gradient-to-br from-blue-50 to-white rounded-3xl p-8 lg:p-12">
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                                <div class="">
+                                    <div
+                                        class="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-6">
+                                        Student Success
+                                    </div>
+                                    <h3 class="text-3xl font-bold text-gray-900 mb-4">
+                                        From having zero sales experience to becoming the
+                                        top-performing SDR at a growing SaaS startup in just 8
+                                        months.
+                                    </h3>
+                                    <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="lucide lucide-quote h-8 w-8 text-blue-400 mb-4">
+                                            <path
+                                                d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z">
+                                            </path>
+                                            <path
+                                                d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z">
+                                            </path>
+                                        </svg>
+                                        <p class="text-gray-700 text-lg italic mb-4">
+                                            "Talent Desk gave me the practical skills and confidence I
+                                            needed. The real project experience was invaluable, and
+                                            the mentorship helped me land my dream job."
+                                        </p>
+                                        <div class="flex items-center space-x-4">
+                                            <img src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=400"
+                                                alt="Priya Sharma" class="w-12 h-12 rounded-full object-cover" />
+                                            <div>
+                                                <div class="font-semibold text-gray-900">
+                                                    Priya Sharma
+                                                </div>
+                                                <div class="text-gray-600 text-sm">
+                                                    Sales Development Representative, TechStart Inc.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-blue-600">0</div>
+                                            <div class="text-gray-600 text-sm">to Top Performer</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-blue-600">8</div>
+                                            <div class="text-gray-600 text-sm">months</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-blue-600">150%</div>
+                                            <div class="text-gray-600 text-sm">quota achievement</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="relative">
+                                        <img src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=400"
+                                            alt="Priya Sharma" class="w-full h-96 object-cover rounded-2xl shadow-2xl" />
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent rounded-2xl">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-white rounded-3xl p-8 lg:p-12">
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                                <div class="lg:order-2">
+                                    <div
+                                        class="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-6">
+                                        College Partnership
+                                    </div>
+                                    <h3 class="text-3xl font-bold text-gray-900 mb-4">
+                                        Increased placement rates by 35% after partnering with
+                                        Talent Desk for non-tech career training programs.
+                                    </h3>
+                                    <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="lucide lucide-quote h-8 w-8 text-green-400 mb-4">
+                                            <path
+                                                d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z">
+                                            </path>
+                                            <path
+                                                d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z">
+                                            </path>
+                                        </svg>
+                                        <p class="text-gray-700 text-lg italic mb-4">
+                                            "Our students now have access to industry-relevant skills
+                                            and direct connections to startups. The placement success
+                                            rate has improved dramatically."
+                                        </p>
+                                        <div class="flex items-center space-x-4">
+                                            <img src="https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=400"
+                                                alt="St. Xavier's College" class="w-12 h-12 rounded-full object-cover" />
+                                            <div>
+                                                <div class="font-semibold text-gray-900">
+                                                    St. Xavier's College
+                                                </div>
+                                                <div class="text-gray-600 text-sm">
+                                                    Placement Officer, Mumbai
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-green-600">35%</div>
+                                            <div class="text-gray-600 text-sm">increase</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-green-600">200+</div>
+                                            <div class="text-gray-600 text-sm">students</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-green-600">90%</div>
+                                            <div class="text-gray-600 text-sm">satisfaction</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lg:order-1">
+                                    <div class="relative">
+                                        <img src="https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=400"
+                                            alt="St. Xavier's College"
+                                            class="w-full h-96 object-cover rounded-2xl shadow-2xl" />
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-t from-green-900/20 to-transparent rounded-2xl">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-50 to-white rounded-3xl p-8 lg:p-12">
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                                <div class="">
+                                    <div
+                                        class="inline-block px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mb-6">
+                                        Startup Success
+                                    </div>
+                                    <h3 class="text-3xl font-bold text-gray-900 mb-4">
+                                        Hired 5 trained marketing professionals through Talent Desk,
+                                        reducing hiring time by 60% and training costs by 80%.
+                                    </h3>
+                                    <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="lucide lucide-quote h-8 w-8 text-purple-400 mb-4">
+                                            <path
+                                                d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z">
+                                            </path>
+                                            <path
+                                                d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z">
+                                            </path>
+                                        </svg>
+                                        <p class="text-gray-700 text-lg italic mb-4">
+                                            "The talent we hired through Talent Desk was immediately
+                                            productive. They came with real experience and hit the
+                                            ground running."
+                                        </p>
+                                        <div class="flex items-center space-x-4">
+                                            <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=400"
+                                                alt="GrowthLabs" class="w-12 h-12 rounded-full object-cover" />
+                                            <div>
+                                                <div class="font-semibold text-gray-900">
+                                                    GrowthLabs
+                                                </div>
+                                                <div class="text-gray-600 text-sm">
+                                                    Founder &amp; CEO, B2B SaaS Startup
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-purple-600">5</div>
+                                            <div class="text-gray-600 text-sm">hires</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-purple-600">60%</div>
+                                            <div class="text-gray-600 text-sm">faster hiring</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-purple-600">80%</div>
+                                            <div class="text-gray-600 text-sm">cost reduction</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="relative">
+                                        <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=400"
+                                            alt="GrowthLabs" class="w-full h-96 object-cover rounded-2xl shadow-2xl" />
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-t from-purple-900/20 to-transparent rounded-2xl">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-3xl p-12">
+                        <h3 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                            What Our Community Says
+                        </h3>
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <div class="flex items-center space-x-1 mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg>
+                                </div>
+                                <p class="text-gray-700 mb-6 italic">
+                                    "The hands-on training approach at Talent Desk is unmatched. I
+                                    learned more in 6 months than I did in 2 years of college."
+                                </p>
+                                <div>
+                                    <div class="font-semibold text-gray-900">Rahul Mehta</div>
+                                    <div class="text-gray-600 text-sm">
+                                        Digital Marketing Manager
+                                    </div>
+                                    <div class="text-gray-500 text-sm">E-commerce Startup</div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <div class="flex items-center space-x-1 mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg>
+                                </div>
+                                <p class="text-gray-700 mb-6 italic">
+                                    "Talent Desk has transformed our placement outcomes. Our
+                                    students are now getting offers from top startups."
+                                </p>
+                                <div>
+                                    <div class="font-semibold text-gray-900">
+                                        Dr. Anjali Patel
+                                    </div>
+                                    <div class="text-gray-600 text-sm">Head of Placements</div>
+                                    <div class="text-gray-500 text-sm">Engineering College</div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <div class="flex items-center space-x-1 mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-star h-5 w-5 text-yellow-400 fill-current">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
+                                    </svg>
+                                </div>
+                                <p class="text-gray-700 mb-6 italic">
+                                    "Hiring through Talent Desk saved us months of recruitment
+                                    time. The candidates were well-prepared and job-ready."
+                                </p>
+                                <div>
+                                    <div class="font-semibold text-gray-900">Vikram Singh</div>
+                                    <div class="text-gray-600 text-sm">Startup Founder</div>
+                                    <div class="text-gray-500 text-sm">FinTech Company</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-20 text-center">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                            <div>
+                                <div class="text-4xl font-bold text-blue-600 mb-2">500+</div>
+                                <div class="text-gray-600">Success Stories</div>
+                            </div>
+                            <div>
+                                <div class="text-4xl font-bold text-green-600 mb-2">85%</div>
+                                <div class="text-gray-600">Placement Rate</div>
+                            </div>
+                            <div>
+                                <div class="text-4xl font-bold text-purple-600 mb-2">100+</div>
+                                <div class="text-gray-600">Partner Companies</div>
+                            </div>
+                            <div>
+                                <div class="text-4xl font-bold text-orange-600 mb-2">4.9/5</div>
+                                <div class="text-gray-600">Satisfaction Score</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-16 text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                            Ready to Write Your Success Story?
+                        </h3>
+                        <p class="text-gray-600 mb-8">
+                            Join thousands of students, colleges, and startups who have
+                            transformed their outcomes
+                        </p>
+                        <button
+                            class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 inline-flex items-center space-x-2">
+                            <span>Start Your Journey</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right h-5 w-5">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="py-24 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20">
+                <div class="wave-bg" style="background: linear-gradient(45deg, #3B82F6 0%, #10B981 100%);"></div>
+            </div>
+            <div class="relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-20">
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                            Let's Build the Future<span
+                                class="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">Together</span>
+                        </h2>
+                        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                            Have questions? Ready to partner? Want to hire talent? We'd love
+                            to hear from you.
+                        </p>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-16">
+                        <div class="bg-white rounded-3xl p-8 shadow-lg">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-8">
+                                Send us a message
+                            </h3>
+                            <form class="space-y-6">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name
+                                            *</label><input type="text" id="name" name="name" required=""
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            placeholder="Your full name" value="" />
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email
+                                            Address *</label><input type="email" id="email" name="email" required=""
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            placeholder="your@email.com" value="" />
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone
+                                            Number</label><input type="tel" id="phone" name="phone"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            placeholder="+91 98765 43210" value="" />
+                                    </div>
+                                    <div>
+                                        <label for="category" class="block text-sm font-medium text-gray-700 mb-2">I am...
+                                            *</label><select id="category" name="category" required=""
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                            <option value="">Select category</option>
+                                            <option value="I'm a Student">I'm a Student</option>
+                                            <option value="I represent a College">
+                                                I represent a College
+                                            </option>
+                                            <option value="I'm from a Startup">
+                                                I'm from a Startup
+                                            </option>
+                                            <option value="I need Services">I need Services</option>
+                                            <option value="General Inquiry">General Inquiry</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message
+                                        *</label><textarea id="message" name="message" required="" rows="6"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                                        placeholder="Tell us about your needs, questions, or how we can help..."></textarea>
+                                </div>
+                                <button type="submit"
+                                    class="w-full bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-send h-5 w-5">
+                                        <path d="m22 2-7 20-4-9-9-4Z"></path>
+                                        <path d="M22 2 11 13"></path>
+                                    </svg><span>Send Message</span>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-8">
+                                    Get in touch
+                                </h3>
+                                <div class="space-y-6">
+                                    <div class="flex items-start space-x-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-mail h-6 w-6 text-blue-600">
+                                                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-900 mb-1">
+                                                Email Us
+                                            </h4>
+                                            <p class="text-blue-600 font-medium mb-1">
+                                                hello@talentdesk.com
+                                            </p>
+                                            <p class="text-gray-600 text-sm">
+                                                Send us an email anytime
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-phone h-6 w-6 text-blue-600">
+                                                <path
+                                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-900 mb-1">
+                                                Call Us
+                                            </h4>
+                                            <p class="text-blue-600 font-medium mb-1">
+                                                +91 98765 43210
+                                            </p>
+                                            <p class="text-gray-600 text-sm">
+                                                Mon-Fri from 9am to 6pm
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-map-pin h-6 w-6 text-blue-600">
+                                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                                <circle cx="12" cy="10" r="3"></circle>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-900 mb-1">
+                                                Visit Us
+                                            </h4>
+                                            <p class="text-blue-600 font-medium mb-1">
+                                                Mumbai, India
+                                            </p>
+                                            <p class="text-gray-600 text-sm">
+                                                Come say hello at our office
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl p-8">
+                                <h4 class="text-xl font-bold text-gray-900 mb-6">
+                                    Quick Actions
+                                </h4>
+                                <div class="space-y-4">
+                                    <button
+                                        class="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 text-left">
+                                        Schedule a Free Consultation</button><button
+                                        class="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 text-left">
+                                        Download Our Brochure</button><button
+                                        class="w-full bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 text-left">
+                                        Join Our Newsletter
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-3xl p-8 shadow-lg">
+                                <h4 class="text-xl font-bold text-gray-900 mb-6">
+                                    Frequently Asked Questions
+                                </h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h5 class="font-semibold text-gray-900 mb-2">
+                                            How long is the training program?
+                                        </h5>
+                                        <p class="text-gray-600 text-sm">
+                                            Our comprehensive training program is 6 months long with
+                                            hands-on projects.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-900 mb-2">
+                                            Do you guarantee job placement?
+                                        </h5>
+                                        <p class="text-gray-600 text-sm">
+                                            We have an 85% placement success rate and provide
+                                            dedicated placement support.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-900 mb-2">
+                                            Can colleges partner with you?
+                                        </h5>
+                                        <p class="text-gray-600 text-sm">
+                                            Yes! We offer comprehensive partnership programs for
+                                            educational institutions.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="bg-gray-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="py-16">
+                    <div class="grid lg:grid-cols-5 gap-12">
+                        <div class="lg:col-span-2">
+                            <div class="flex items-center space-x-3 mb-6">
+                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="350" zoomAndPan="magnify" viewBox="0 0 262.5 112.499997" height="150" preserveAspectRatio="xMidYMid meet" version="1.2"><defs><clipPath id="fe134a2ee9"><path d="M 0.332031 0 L 261.671875 0 L 261.671875 112.003906 L 0.332031 112.003906 Z M 0.332031 0 "/></clipPath><clipPath id="f7b1a38894"><path d="M 65.457031 24.875 L 126.847656 24.875 L 126.847656 87.222656 L 65.457031 87.222656 Z M 65.457031 24.875 "/></clipPath><clipPath id="b71a87a7f8"><path d="M 96.152344 24.875 C 79.199219 24.875 65.457031 38.808594 65.457031 56 C 65.457031 73.191406 79.199219 87.128906 96.152344 87.128906 C 113.105469 87.128906 126.847656 73.191406 126.847656 56 C 126.847656 38.808594 113.105469 24.875 96.152344 24.875 Z M 96.152344 24.875 "/></clipPath><clipPath id="d38f025b58"><path d="M 104 54 L 111 54 L 111 62 L 104 62 Z M 104 54 "/></clipPath><clipPath id="8b0ffaf9fb"><path d="M 106.203125 53.90625 L 112.652344 55.796875 L 111 61.429688 L 104.550781 59.539062 Z M 106.203125 53.90625 "/></clipPath><clipPath id="a3ae91393b"><path d="M 109.421875 54.851562 L 110.988281 61.429688 L 104.550781 59.539062 Z M 109.421875 54.851562 "/></clipPath></defs><g id="c96b455dff"><g clip-rule="nonzero" clip-path="url(#fe134a2ee9)"><path style=" stroke:none;fill-rule:nonzero;fill:#ffffff;fill-opacity:1;" d="M 0.332031 0 L 261.671875 0 L 261.671875 112.003906 L 0.332031 112.003906 Z M 0.332031 0 "/><path style=" stroke:none;fill-rule:nonzero;fill:#ffffff;fill-opacity:1;" d="M 0.332031 0 L 261.671875 0 L 261.671875 112.003906 L 0.332031 112.003906 Z M 0.332031 0 "/></g><g clip-rule="nonzero" clip-path="url(#f7b1a38894)"><g clip-rule="nonzero" clip-path="url(#b71a87a7f8)"><path style=" stroke:none;fill-rule:nonzero;fill:#18b775;fill-opacity:1;" d="M 65.457031 24.875 L 126.847656 24.875 L 126.847656 87.222656 L 65.457031 87.222656 Z M 65.457031 24.875 "/></g></g><g style="fill:#ffffff;fill-opacity:1;"><g transform="translate(84.436462, 72.830616)"><path style="stroke:none" d="M 23.984375 -15.40625 L 25.03125 -14.640625 C 24.9375 -14.390625 24.804688 -14.0625 24.640625 -13.65625 C 24.484375 -13.257812 24.125 -12.460938 23.5625 -11.265625 C 23.007812 -10.066406 22.429688 -8.929688 21.828125 -7.859375 C 21.222656 -6.796875 20.445312 -5.617188 19.5 -4.328125 C 18.5625 -3.035156 17.601562 -1.9375 16.625 -1.03125 C 15.65625 -0.125 14.53125 0.613281 13.25 1.1875 C 11.976562 1.769531 10.703125 2.015625 9.421875 1.921875 C 8.660156 1.878906 8.007812 1.492188 7.46875 0.765625 C 6.925781 0.0351562 6.519531 -1.035156 6.25 -2.453125 C 5.976562 -3.878906 5.769531 -5.359375 5.625 -6.890625 C 5.476562 -8.421875 5.421875 -10.28125 5.453125 -12.46875 C 5.484375 -14.65625 5.53125 -16.59375 5.59375 -18.28125 C 5.65625 -19.96875 5.753906 -21.945312 5.890625 -24.21875 C 5.691406 -24.21875 5.414062 -24.207031 5.0625 -24.1875 C 4.71875 -24.175781 4.46875 -24.15625 4.3125 -24.125 C 3.601562 -24.125 3.09375 -24.109375 2.78125 -24.078125 L -0.328125 -24.078125 L -0.484375 -25.5625 C -0.421875 -25.5625 -0.335938 -25.578125 -0.234375 -25.609375 C -0.203125 -25.609375 0.00390625 -25.640625 0.390625 -25.703125 C 0.546875 -25.734375 0.734375 -25.765625 0.953125 -25.796875 C 1.179688 -25.828125 1.460938 -25.863281 1.796875 -25.90625 C 2.128906 -25.957031 2.40625 -26 2.625 -26.03125 C 2.726562 -26.03125 2.953125 -26.050781 3.296875 -26.09375 C 3.648438 -26.144531 3.921875 -26.191406 4.109375 -26.234375 C 4.460938 -26.296875 5.023438 -26.359375 5.796875 -26.421875 C 5.859375 -26.453125 5.921875 -26.46875 5.984375 -26.46875 C 6.398438 -32.78125 6.476562 -36.414062 6.21875 -37.375 C 6.34375 -37.40625 6.5 -37.4375 6.6875 -37.46875 C 6.882812 -37.5 7.257812 -37.519531 7.8125 -37.53125 C 8.375 -37.550781 8.898438 -37.53125 9.390625 -37.46875 C 9.890625 -37.40625 10.4375 -37.242188 11.03125 -36.984375 C 11.625 -36.734375 12.125 -36.390625 12.53125 -35.953125 C 12.945312 -35.523438 13.273438 -34.910156 13.515625 -34.109375 C 13.753906 -33.316406 13.828125 -32.378906 13.734375 -31.296875 C 13.703125 -30.722656 13.625 -29.320312 13.5 -27.09375 C 13.625 -27.09375 13.84375 -27.097656 14.15625 -27.109375 C 14.476562 -27.128906 14.707031 -27.140625 14.84375 -27.140625 C 15.1875 -27.171875 15.675781 -27.1875 16.3125 -27.1875 C 16.476562 -27.1875 16.703125 -27.191406 16.984375 -27.203125 C 17.273438 -27.222656 17.484375 -27.234375 17.609375 -27.234375 L 19.484375 -27.234375 L 19.578125 -25.75 C 19.378906 -25.6875 19.109375 -25.625 18.765625 -25.5625 C 18.472656 -25.5 18.132812 -25.445312 17.75 -25.40625 C 17.625 -25.40625 17.425781 -25.378906 17.15625 -25.328125 C 16.882812 -25.285156 16.671875 -25.25 16.515625 -25.21875 C 16.347656 -25.21875 16.097656 -25.191406 15.765625 -25.140625 C 15.429688 -25.097656 15.171875 -25.0625 14.984375 -25.03125 C 14.847656 -25.03125 14.597656 -25.003906 14.234375 -24.953125 C 13.867188 -24.910156 13.59375 -24.875 13.40625 -24.84375 C 13.269531 -22.320312 13.171875 -19.546875 13.109375 -16.515625 C 13.140625 -10.703125 13.1875 -7.429688 13.25 -6.703125 C 13.476562 -4.085938 14.039062 -2.796875 14.9375 -2.828125 C 15.34375 -2.828125 15.820312 -3.050781 16.375 -3.5 C 17.289062 -4.257812 18.382812 -5.628906 19.65625 -7.609375 C 20.9375 -9.585938 21.976562 -11.390625 22.78125 -13.015625 Z M 23.984375 -15.40625 "/></g></g><g clip-rule="nonzero" clip-path="url(#d38f025b58)"><g clip-rule="nonzero" clip-path="url(#8b0ffaf9fb)"><g clip-rule="nonzero" clip-path="url(#a3ae91393b)"><path style=" stroke:none;fill-rule:nonzero;fill:#ffffff;fill-opacity:1;" d="M 106.203125 53.90625 L 112.652344 55.796875 L 111 61.429688 L 104.550781 59.539062 Z M 106.203125 53.90625 "/></g></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(131.785174, 50.064245)"><path style="stroke:none" d="M 10.15625 -9.578125 L 6.890625 -9.578125 L 6.890625 0 L 3.859375 0 L 3.859375 -9.578125 L 0.578125 -9.578125 L 0.578125 -12.609375 L 10.15625 -12.609375 Z M 10.15625 -9.578125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(142.347196, 50.064245)"><path style="stroke:none" d="M 7.75 -10.03125 L 10.46875 -10.03125 L 10.46875 0 L 7.75 0 L 7.75 -1.125 C 7.195312 -0.394531 6.359375 -0.03125 5.234375 -0.03125 C 3.867188 -0.0195312 2.691406 -0.5 1.703125 -1.46875 C 0.722656 -2.4375 0.226562 -3.613281 0.21875 -5 C 0.195312 -6.375 0.671875 -7.550781 1.640625 -8.53125 C 2.617188 -9.507812 3.796875 -10.007812 5.171875 -10.03125 C 6.316406 -10.03125 7.175781 -9.660156 7.75 -8.921875 Z M 6.9375 -3.296875 C 7.414062 -3.773438 7.65625 -4.359375 7.65625 -5.046875 C 7.65625 -5.742188 7.410156 -6.320312 6.921875 -6.78125 C 6.429688 -7.28125 5.859375 -7.515625 5.203125 -7.484375 C 4.515625 -7.484375 3.929688 -7.242188 3.453125 -6.765625 C 2.972656 -6.285156 2.734375 -5.703125 2.734375 -5.015625 C 2.734375 -4.347656 2.976562 -3.769531 3.46875 -3.28125 C 3.945312 -2.800781 4.53125 -2.5625 5.21875 -2.5625 C 5.914062 -2.582031 6.488281 -2.828125 6.9375 -3.296875 Z M 6.9375 -3.296875 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(153.393707, 50.064245)"><path style="stroke:none" d="M 3.296875 -13.46875 L 3.296875 0 L 0.578125 0 L 0.578125 -13.46875 Z M 3.296875 -13.46875 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(157.269688, 50.064245)"><path style="stroke:none" d="M 10.203125 -4.5625 C 10.210938 -4.289062 10.210938 -4.128906 10.203125 -4.078125 L 2.90625 -4.09375 C 3.007812 -3.789062 3.195312 -3.503906 3.46875 -3.234375 C 3.976562 -2.753906 4.5625 -2.515625 5.21875 -2.515625 C 5.914062 -2.546875 6.5 -2.789062 6.96875 -3.25 L 7.03125 -3.328125 L 9.5625 -2.546875 C 9 -1.671875 8.414062 -1.046875 7.8125 -0.671875 C 7.125 -0.234375 6.265625 -0.0078125 5.234375 0 C 3.867188 0.0078125 2.691406 -0.46875 1.703125 -1.4375 C 0.722656 -2.40625 0.226562 -3.582031 0.21875 -4.96875 C 0.195312 -6.332031 0.671875 -7.507812 1.640625 -8.5 C 2.617188 -9.476562 3.796875 -9.972656 5.171875 -9.984375 C 6.546875 -9.992188 7.722656 -9.515625 8.703125 -8.546875 C 9.691406 -7.578125 10.191406 -6.398438 10.203125 -5.015625 Z M 5.203125 -7.453125 C 4.515625 -7.453125 3.929688 -7.210938 3.453125 -6.734375 C 3.203125 -6.460938 3.023438 -6.191406 2.921875 -5.921875 L 7.484375 -5.921875 C 7.378906 -6.191406 7.195312 -6.46875 6.9375 -6.75 C 6.445312 -7.21875 5.867188 -7.453125 5.203125 -7.453125 Z M 5.203125 -7.453125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(167.676661, 50.064245)"><path style="stroke:none" d="M 5.546875 -9.953125 C 6.960938 -10.066406 8.140625 -9.695312 9.078125 -8.84375 C 10.066406 -7.925781 10.5625 -6.640625 10.5625 -4.984375 L 10.5625 0 L 8.046875 0 L 8.046875 -4.921875 L 8.03125 -4.921875 L 8.03125 -4.96875 C 8.03125 -5.644531 7.789062 -6.222656 7.3125 -6.703125 C 6.832031 -7.179688 6.25 -7.421875 5.5625 -7.421875 C 4.863281 -7.398438 4.28125 -7.15625 3.8125 -6.6875 C 3.320312 -6.195312 3.09375 -5.613281 3.125 -4.9375 L 3.125 -4.921875 L 3.109375 -4.921875 L 3.109375 0 L 0.390625 0 L 0.390625 -10.03125 L 3.109375 -10.03125 L 3.109375 -8.71875 C 3.710938 -9.445312 4.523438 -9.859375 5.546875 -9.953125 Z M 5.546875 -9.953125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(178.626274, 50.064245)"><path style="stroke:none" d="M 7.78125 -9.984375 L 7.78125 -7.265625 L 5.546875 -7.265625 L 5.546875 0 L 2.828125 0 L 2.828125 -7.265625 L 0.578125 -7.265625 L 0.578125 -9.984375 L 2.828125 -9.984375 L 2.828125 -13.46875 L 5.546875 -13.46875 L 5.546875 -9.984375 Z M 7.78125 -9.984375 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(186.99623, 50.064245)"><path style="stroke:none" d=""/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(131.785174, 69.619109)"><path style="stroke:none" d="M 6.953125 -16.21875 C 9.191406 -16.21875 11.117188 -15.421875 12.734375 -13.828125 C 14.316406 -12.242188 15.109375 -10.320312 15.109375 -8.0625 C 15.109375 -5.820312 14.316406 -3.894531 12.734375 -2.28125 C 11.117188 -0.695312 9.191406 0.09375 6.953125 0.09375 L 0.75 0.09375 L 0.75 -16.21875 Z M 10.0625 -4.953125 C 10.914062 -5.804688 11.34375 -6.84375 11.34375 -8.0625 C 11.34375 -9.269531 10.914062 -10.316406 10.0625 -11.203125 C 9.207031 -12.054688 8.164062 -12.484375 6.9375 -12.484375 L 4.671875 -12.484375 L 4.671875 -3.671875 L 6.953125 -3.671875 C 8.171875 -3.671875 9.207031 -4.097656 10.0625 -4.953125 Z M 10.0625 -4.953125 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(147.649664, 69.619109)"><path style="stroke:none" d="M 13.203125 -5.90625 C 13.222656 -5.550781 13.222656 -5.335938 13.203125 -5.265625 L 3.765625 -5.296875 C 3.898438 -4.910156 4.144531 -4.539062 4.5 -4.1875 C 5.144531 -3.570312 5.894531 -3.265625 6.75 -3.265625 C 7.65625 -3.296875 8.410156 -3.613281 9.015625 -4.21875 L 9.109375 -4.3125 L 12.375 -3.296875 C 11.65625 -2.171875 10.90625 -1.363281 10.125 -0.875 C 9.226562 -0.3125 8.113281 -0.0195312 6.78125 0 C 5.007812 0.0195312 3.484375 -0.597656 2.203125 -1.859375 C 0.929688 -3.109375 0.289062 -4.628906 0.28125 -6.421875 C 0.257812 -8.203125 0.878906 -9.726562 2.140625 -11 C 3.390625 -12.269531 4.910156 -12.914062 6.703125 -12.9375 C 8.472656 -12.945312 10 -12.328125 11.28125 -11.078125 C 12.550781 -9.816406 13.191406 -8.289062 13.203125 -6.5 Z M 6.734375 -9.640625 C 5.847656 -9.640625 5.09375 -9.332031 4.46875 -8.71875 C 4.15625 -8.363281 3.929688 -8.007812 3.796875 -7.65625 L 9.6875 -7.65625 C 9.550781 -8.007812 9.316406 -8.367188 8.984375 -8.734375 C 8.347656 -9.335938 7.597656 -9.640625 6.734375 -9.640625 Z M 6.734375 -9.640625 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(161.129472, 69.619109)"><path style="stroke:none" d="M 5.96875 0 C 5.101562 0 4.34375 -0.132812 3.6875 -0.40625 C 3.164062 -0.582031 2.628906 -0.925781 2.078125 -1.4375 C 1.128906 -2.320312 0.695312 -3.441406 0.78125 -4.796875 L 0.78125 -5.078125 L 3.59375 -5.015625 L 3.8125 -5.015625 L 3.8125 -4.828125 C 3.832031 -4.398438 3.925781 -4.054688 4.09375 -3.796875 C 4.375 -3.304688 5 -3.0625 5.96875 -3.0625 C 6.78125 -3.0625 7.359375 -3.15625 7.703125 -3.34375 C 7.890625 -3.425781 8.015625 -3.535156 8.078125 -3.671875 C 8.117188 -3.710938 8.140625 -3.757812 8.140625 -3.8125 L 8.15625 -3.9375 C 8.15625 -4.289062 7.878906 -4.578125 7.328125 -4.796875 C 7.109375 -4.878906 6.859375 -4.945312 6.578125 -5 C 6.359375 -5.050781 6.113281 -5.09375 5.84375 -5.125 C 4.84375 -5.21875 4.007812 -5.414062 3.34375 -5.71875 C 2.664062 -5.988281 2.113281 -6.359375 1.6875 -6.828125 C 1.082031 -7.515625 0.78125 -8.300781 0.78125 -9.1875 C 0.78125 -9.738281 0.878906 -10.25 1.078125 -10.71875 C 1.234375 -11.09375 1.4375 -11.421875 1.6875 -11.703125 C 2.582031 -12.734375 4.03125 -13.25 6.03125 -13.25 C 7.21875 -13.25 8.222656 -13.015625 9.046875 -12.546875 C 9.679688 -12.203125 10.191406 -11.726562 10.578125 -11.125 C 10.867188 -10.675781 11.078125 -10.148438 11.203125 -9.546875 C 11.234375 -9.335938 11.257812 -9.144531 11.28125 -8.96875 L 11.28125 -8.4375 L 8.234375 -8.4375 L 8.234375 -8.8125 C 8.210938 -8.875 8.203125 -8.941406 8.203125 -9.015625 C 8.160156 -9.203125 8.097656 -9.351562 8.015625 -9.46875 C 7.640625 -9.96875 6.976562 -10.21875 6.03125 -10.21875 C 4.625 -10.21875 3.921875 -9.925781 3.921875 -9.34375 C 3.921875 -9.039062 4.085938 -8.796875 4.421875 -8.609375 C 4.773438 -8.390625 5.367188 -8.234375 6.203125 -8.140625 C 8.128906 -7.929688 9.523438 -7.316406 10.390625 -6.296875 C 10.984375 -5.609375 11.28125 -4.820312 11.28125 -3.9375 L 11.28125 -3.765625 L 11.25 -3.546875 C 11.25 -3.328125 11.222656 -3.125 11.171875 -2.9375 C 11.035156 -2.40625 10.785156 -1.925781 10.421875 -1.5 C 10.003906 -1 9.414062 -0.625 8.65625 -0.375 C 7.90625 -0.125 7.007812 0 5.96875 0 Z M 5.96875 0 "/></g></g><g style="fill:#18b775;fill-opacity:1;"><g transform="translate(173.153366, 69.619109)"><path style="stroke:none" d="M 9.671875 0 L 5.46875 -5.015625 L 4.265625 -3.84375 L 4.265625 0 L 0.75 0 L 0.75 -17.453125 L 4.265625 -17.453125 L 4.265625 -8.8125 L 8.390625 -12.9375 L 13.359375 -12.90625 L 7.9375 -7.5 L 14.34375 0 Z M 9.671875 0 "/></g></g></g></svg>
+
+                            </div>
+                            <p class="text-gray-300 mb-8 leading-relaxed">
+                                Empowering the next generation of non-tech talent through
+                                comprehensive training, strategic partnerships, and innovative
+                                solutions in Sales, Digital Marketing, and Recruitment.
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-mail h-5 w-5 text-blue-400">
+                                        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                    </svg>
+                                    <span class="text-gray-300">hello@talentdesk.com</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-phone h-5 w-5 text-blue-400">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                        </path>
+                                    </svg><span class="text-gray-300">+91 98765 43210</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-map-pin h-5 w-5 text-blue-400">
+                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg><span class="text-gray-300">Mumbai, India</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-6">Solutions</h3>
+                            <ul class="space-y-4">
+                                <li>
+                                    <a href="#students"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">For
+                                        Students</a>
+                                </li>
+                                <li>
+                                    <a href="#colleges"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">For
+                                        Colleges</a>
+                                </li>
+                                <li>
+                                    <a href="#startups"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">For
+                                        Startups</a>
+                                </li>
+                                <li>
+                                    <a href="#success"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Success
+                                        Stories</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-6">Services</h3>
+                            <ul class="space-y-4">
+                                <li>
+                                    <a href="#services"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Digital
+                                        Marketing</a>
+                                </li>
+                                <li>
+                                    <a href="#services"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Sales
+                                        Operations</a>
+                                </li>
+                                <li>
+                                    <a href="#services"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Recruitment</a>
+                                </li>
+                                <li>
+                                    <a href="#services"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Consulting</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-6">Company</h3>
+                            <ul class="space-y-4">
+                                <li>
+                                    <a href="#about"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">About
+                                        Us</a>
+                                </li>
+                                <li>
+                                    <a href="#about"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Our
+                                        Team</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Careers</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Press</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-6">Resources</h3>
+                            <ul class="space-y-4">
+                                <li>
+                                    <a href="#blog"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Blog</a>
+                                </li>
+                                <li>
+                                    <a href="#success"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Case
+                                        Studies</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Webinars</a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="text-gray-300 hover:text-white transition-colors duration-200">Downloads</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 py-12">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">Stay Updated</h3>
+                            <p class="text-gray-300">
+                                Get the latest insights on non-tech careers, startup trends, and
+                                success stories.
+                            </p>
+                        </div>
+                        <div class="flex space-x-4">
+                            <input type="email" placeholder="Enter your email"
+                                class="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent" /><button
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 py-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                        <div class="text-gray-400 text-sm">
+                            © 2024 Talent Desk. All rights reserved.
+                        </div>
+                        <div class="flex items-center space-x-6">
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200"
+                                aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-linkedin h-5 w-5">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                    </path>
+                                    <rect width="4" height="12" x="2" y="9"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg></a><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-200"
+                                aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-twitter h-5 w-5">
+                                    <path
+                                        d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
+                                    </path>
+                                </svg></a><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-200"
+                                aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-instagram h-5 w-5">
+                                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                                </svg></a><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-200"
+                                aria-label="YouTube"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-youtube h-5 w-5">
+                                    <path
+                                        d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17">
+                                    </path>
+                                    <path d="m10 15 5-3-5-3z"></path>
+                                </svg></a>
+                        </div>
+                        <div class="flex items-center space-x-6 text-sm text-gray-400">
+                            <a href="#" class="hover:text-white transition-colors duration-200">Privacy Policy</a><a
+                                href="#" class="hover:text-white transition-colors duration-200">Terms of Service</a><a
+                                href="#" class="hover:text-white transition-colors duration-200">Cookie Policy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
